@@ -71,6 +71,17 @@ export function normalizeSlashes(path: string): string {
     return path.replace(/\\/g, "/");
 }
 
+export function stringify(obj: any, encode: boolean = false) {
+    const json = JSON.stringify(obj);
+    return (encode) ? encodeJson(json) : json;
+}
+
+function encodeJson(json: string) {
+    return json.replace(/[\u007F-\uFFFF]/g, function(chr) {
+        return "\\u" + ("0000" + chr.charCodeAt(0).toString(16)).substr(-4)
+    });
+}
+
 /**
  * Encrypts sensitive settings for the specified project and returns the result
  * @param project The project to encrypt

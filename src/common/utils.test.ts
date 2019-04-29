@@ -1,5 +1,5 @@
 import { randomIntInRange, createQueryString, encryptProject,
-    decryptProject, normalizeSlashes, encodeFileURI } from "./utils";
+    decryptProject, normalizeSlashes, encodeFileURI, stringify } from "./utils";
 import MockFactory from "./mockFactory";
 
 describe("Helper functions", () => {
@@ -85,4 +85,18 @@ describe("Helper functions", () => {
             expect(decryptedProject).toEqual(testProject);
         });
     });
+
+    describe("String utils", () => {
+        it("Encodes a unicode string", () => {
+            const original = {
+                unicode: "There are 😂 unicode 코트 characters 漢 here",
+                ascii: "There are no unicode characters here",
+            };
+
+            const json = stringify(original, true);
+            const parsed = JSON.parse(json);
+            expect(parsed.unicode).toEqual(original.unicode);
+            expect(parsed.ascii).toEqual(original.ascii);
+        });
+    })
 });
